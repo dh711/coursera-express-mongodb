@@ -269,7 +269,9 @@ dishRouter
                 (dish) => {
                     if (
                         dish != null &&
-                        dish.comments.id(req.params.commentId) != null
+                        dish.comments.id(req.params.commentId) != null &&
+                        dish.comments.id(req.params.commentId).author._id ===
+                            req.user._id
                     ) {
                         if (req.body.rating) {
                             dish.comments.id(req.params.commentId).rating =
@@ -292,6 +294,15 @@ dishRouter
                                 });
                         }),
                             (err) => next(err);
+                    } else if (
+                        dish.comments.id(req.params.commentId).author._id !==
+                        req.user._id
+                    ) {
+                        err = new Error(
+                            "You can only update comments authored by yourself."
+                        );
+                        err.status = 404;
+                        return next(err);
                     } else if (dish == null) {
                         err = new Error(
                             "Dish " + req.params.dishId + " not found."
@@ -316,7 +327,9 @@ dishRouter
                 (dish) => {
                     if (
                         dish != null &&
-                        dish.comments.id(req.params.commentId) != null
+                        dish.comments.id(req.params.commentId) != null &&
+                        dish.comments.id(req.params.commentId).author._id ===
+                            req.user._id
                     ) {
                         dish.comments.id(req.params.commentId).remove();
 
@@ -334,6 +347,15 @@ dishRouter
                         }),
                             (err) => next(err);
                         res.json(dish.comments);
+                    } else if (
+                        dish.comments.id(req.params.commentId).author._id !==
+                        req.user._id
+                    ) {
+                        err = new Error(
+                            "You can only update comments authored by yourself."
+                        );
+                        err.status = 404;
+                        return next(err);
                     } else if (dish == null) {
                         err = new Error(
                             "Dish " + req.params.dishId + " not found."
