@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const authenticate = require("../authenticate");
 const multer = require("multer");
+const cors = require("./cors");
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -28,7 +29,11 @@ uploadRouter.use(bodyParser.json());
 
 uploadRouter
     .route("/")
+    .options(cors.corsWithOptions, (req, res) => {
+        res.sendStatus(200);
+    })
     .get(
+        cors.cors,
         authenticate.verifyUser,
         authenticate.verifyAdmin,
         (req, res, next) => {
@@ -37,6 +42,7 @@ uploadRouter
         }
     )
     .post(
+        cors.corsWithOptions,
         authenticate.verifyUser,
         authenticate.verifyAdmin,
         upload.single("imageFile"),
@@ -47,6 +53,7 @@ uploadRouter
         }
     )
     .put(
+        cors.corsWithOptions,
         authenticate.verifyUser,
         authenticate.verifyAdmin,
         (req, res, next) => {
@@ -55,6 +62,7 @@ uploadRouter
         }
     )
     .delete(
+        cors.corsWithOptions,
         authenticate.verifyUser,
         authenticate.verifyAdmin,
         (req, res, next) => {
