@@ -4,6 +4,7 @@ require("mongoose-currency").loadType(mongoose);
 // Adding a currency type to mongoose.
 const Currency = mongoose.Types.Currency;
 
+const Schema = mongoose.Schema;
 const dishSchema = new Schema(
     {
         name: {

@@ -5,7 +5,6 @@ const authenticate = require("../authenticate");
 const cors = require("./cors");
 
 const Leaders = require("../models/leaders");
-const Promotions = require("../models/promotions");
 
 const leaderRouter = express.Router();
 
